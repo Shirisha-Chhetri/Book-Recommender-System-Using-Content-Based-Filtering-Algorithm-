@@ -1,0 +1,66 @@
+{% extends 'header.html' %}
+{% block content %}
+{% load static %}
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+
+    <div id="bookdetail">
+        <div class="row mt-5"> 
+            <div class="col-md-6">    
+                <img src ="{{book.image}}" class="specificimg mt-4 mr-5" alt="...">
+            </div>  
+            <div class="col-md-6">  
+                <h4 class="mt-5 ml-5">{{book.title}}</h4></br>
+                <p class="title ml-5"><b>Author: </b>{{book.author}}</p>            
+                <p class="title ml-5"><b>Genre: </b>
+                {% for x in bookcategory %}
+                    {{x}},
+                {% endfor %}
+                </p>
+                <span class="title ml-5"><b>BookFormat: </b>{{book.bookformat}}</span>
+                <span class="title ml-5"><b>Pages: </b>{{book.pages}}</span><br>
+                <p class="title mt-3 ml-5"><b>ISBN: </b>{{book.isbn}}</p>
+                    {% if not context.is_favourite %} 
+                        <div>
+                            <a href="/add_to_fav/{{book.id}}" class="btn wish mr-3 ml-5 mt-3">Add To WishList</a>
+                        </div>
+                    {% else %} 
+                        <div>
+                            <a href="/remove_from_fav/{{book.id}}" class="btn wish mr-3 ml-5 mt-3">Remove From WishList</a>
+                        </div>
+                    {% endif %}    
+                <a href="https://www.amazon.com/s?k={{book.title}}&rh=n%3A283155&tag=wsirn2020-20" target="_blank" class="btn buy">Buy Now</a>
+            </div>
+            <div>
+                <p class="title mt-5 describe"><b>Description: </b></p>
+                <p class="title mt-2 describe">{{book.description}} </p>
+            </div>
+        </div>
+    </div>
+
+    {% if user.is_authenticated %}
+    <div>
+        <!-- for recommendation -->
+       <p class="genrename mt-5" style="font-size: 1.5pc !important;">You may like...</p>
+        <div class="row" style="margin-top: 2rem;"> 
+             
+            {% for b in recommended_book %}  
+            <div class="con {% cycle 'row1' 'row2' %}">
+                <img src="{{b.image}}" class="booky">         
+                <div class="middle">
+                    <a href="/getbook/{{b.id}}" class="anchor">
+                        <h6>{{b.title}} | By : {{b.author}}</h6>
+                    </a>     
+                </div>
+            </div>
+            {% endfor %}            
+        </div>
+    </div>
+           
+
+    {% else %}
+    <div class="alert alert-info mt-5" role="alert"> 
+        Please Login to get Recommendations...
+    </div>    
+    {% endif %}
+ 
+{% endblock %}

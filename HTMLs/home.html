@@ -1,0 +1,84 @@
+{% extends 'header.html' %}
+{% block content %}
+{% load static %}
+
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+
+    <!-- for searhing --> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"> </script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
+      <script>
+        $(document).ready(function () {
+            $(function() {
+              $("#tags").autocomplete({
+                source: "/search_auto/",
+                select: function (event,ui) { 
+                  ui.item.appendTo(ui);
+                },
+                minLength:2,
+              }).data("ui-autocomplete")._renderItem = function(ul, item) {
+                
+                  item.label = item.title.replace(new RegExp("(?![^&;]+;)(?!<[^<>]*)(" + $.ui.autocomplete.escapeRegex(this.term) + ")(?![^<>]*>)(?![^&;]+;)", "gi"), "<span style='font-weight:bold; color:black'>$1</span>");
+                  item.author1 = item.author.replace(new RegExp("(?![^&;]+;)(?!<[^<>]*)(" + $.ui.autocomplete.escapeRegex(this.term) + ")(?![^<>]*>)(?![^&;]+;)", "gi"), "<span style='font-weight:bold; color:black'>$1</span>");
+                  
+                  return $("<li>")
+                  .data("item.autocomplete", item)
+                  .append('<a href="/getbook/'+item.id+'"> <div class="row"><img class="ml-3" src="' + item.image + '" height="60pc" width="60pc"/><div><p class="ml-2">'+ item.label +'</p><p style="margin-top: -1pc; " class="ml-2 mb-0">By: '+ item.author1 +'</p></div></div></a>') 
+                  .appendTo(ul);              
+              };
+            });
+        });
+      </script>
+       
+    <div class="row">
+        <img src="{% static 'image/book.jpg' %}" class="img"/>
+    </div>
+
+    <div id="sec3">
+        <div class="container">
+            <!-- <div class="row"> -->
+                <p class="book">Discover and Recover Through Books!!!</p>
+                <form class="form-inline my-2 my-lg-0" id="formsubmit" name="form">
+                  <i class="fa fa-search search"></i>
+                  <input class="form-control mr-sm-2 inputs" name="search" type="search" id="tags"
+                  placeholder="Search book that you want to read by name or author..." onkeydown="return (event.keyCode!=13);">
+                </form>
+            <!-- </div> -->
+        </div>
+    </div>
+
+    <div id="sec5">
+      <div class="container-fluid">
+        <div class="row">
+            
+          <!-- to show genre according to category  -->
+          {% for category in category %}
+          <div class="dropdown col-md-3">
+          <button class="btn button btn1 mb-2">{{category.name}}</button>
+          
+          <div class="drop">
+            {% for subcat in category.genre_set.all|dictsort:'title' %}   
+              <a href="/bookson?subcategory={{subcat.id}}">{{subcat.title}}</a>
+            {% endfor %}
+          </div>
+          </div>
+          {% endfor %}       
+        </div>    
+      </div>
+    </div>
+    
+    <div class="row">
+      <img src="{% static 'image/book1.jpg' %}" class="img mb-2" style="height:30pc;"/>
+      <div class="centered col-md-6">
+        <h4>You know you've read a good</h4>
+        <h4>book when you turn the last page</h4>
+        <h4>and feel a little as if </h4>
+        <h4>you have lost a friend.</h4>
+      </div>
+  </div>
+
+{% endblock %}

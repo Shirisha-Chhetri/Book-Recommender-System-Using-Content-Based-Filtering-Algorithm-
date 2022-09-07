@@ -1,0 +1,20 @@
+{% extends 'header.html' %}
+{% block content %}
+{% load static %}
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+
+    <p class="genrename mt-5">Books With {{name}}</p>
+
+    <div class="row" style="margin-top: 1.5rem;">
+        {% for book in books %}  
+        <div class="con">
+            <img src="{{book.image}}" class="booky">         
+            <div class="middle">
+                <a href="/getbook/{{book.id}}" class="anchor">
+                    <h6 class="ml-2">{{book.title}} | By : {{book.author}}</h6>
+                </a>
+            </div>   
+        </div>    
+        {% endfor %} 
+    </div>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'header.html' %}
+{% block content %}
+{% load static %}
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <p class="quote"> "Take a good book to bed with you - Thea Dorn"</p>
+
+    <div class="row mt-3">
+        {% for book in books %}         
+            <div class="col-md-2">
+                <a href="/getbook/{{book.id}}"><img src="{{book.image}}" class="bookimage"></a>   
+            </div>
+        {% endfor %} 
+    </div>
+
+{% endblock %}
